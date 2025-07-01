@@ -1,41 +1,62 @@
+//jose del angel, suliman, matthew.
+// project #2
 #include <iostream>
 #include <fstream>
-#include <string>
 #include <iomanip>
+#include <string>
+
+
 using namespace std;
 
-// Function to calculate average of top 3 scores
-double averageTopThree(double q1, double q2, double q3, double q4) {
-    double lowest = q1;
-
-    if (q2 < lowest) lowest = q2;
-    if (q3 < lowest) lowest = q3;
-    if (q4 < lowest) lowest = q4;
-
-    double total = q1 + q2 + q3 + q4;
-    return (total - lowest) / 3.0;
+double check_function(double q1, double q2, double q3, double q4) {
+    double low = min({q1, q2, q3, q4});
+    double ave = (q1 + q2 + q3 + q4 - low) / 3.0;
+    return ave;
 }
 
 int main() {
-    ifstream inputFile("gradesIn.txt");
-    ofstream outputFile("gradesOut.txt");
+    double q1, q2, q3, q4;
+    string name;
+    double result;
 
-    if (!inputFile || !outputFile) {
-        cerr << "Error opening file." << endl;
+    ifstream inFile("gradesIn.txt");
+    ofstream outFile("gradesOut.txt");
+
+    if (!inFile || !outFile) {
+        cout << "Error opening input or output file." << endl;
         return 1;
     }
 
+    cout << "This program will calculate the average of each student based on their top 3 out of 4 quiz scores.\n";
+    cout << "|--------------------------------------------------------------------------|\n";
+    cout << "| Name\t\tQuiz1\tQuiz2\tQuiz3\tQuiz4\tAverage (Top 3 Quizzes) |\n";
+    cout << "|--------------------------------------------------------------------------|\n";
+
+    outFile << "|--------------------------------------------------------------------------|\n";
+    outFile << "| Name\t\tQuiz1\tQuiz2\tQuiz3\tQuiz4\tAverage (Top 3 Quizzes) |\n";
+    outFile << "|--------------------------------------------------------------------------|\n";
 
 
+    while (inFile >> name >> q1 >> q2 >> q3 >> q4) {
+        result = check_function(q1, q2, q3, q4);
 
+        cout << "| " << name << setw(10)
+             << q1 << setw(10)
+             << q2 << setw(10)
+             << q3 << setw(10)
+             << q4 << setw(20)
+             << fixed << setprecision(2) << result << " |\n";
 
-    
+        outFile << "| " << name << setw(10)
+                << q1 << setw(10)
+                << q2 << setw(10)
+                << q3 << setw(10)
+                << q4 << setw(20)
+                << fixed << setprecision(2) << result << " |\n";
+    }
 
- inputFile.close();
-    outputFile.close();
-
-    cout << "\nOutput saved to 'gradesOut.txt'" << endl;
-
+    inFile.close();
+    outFile.close();
     return 0;
 }
 
